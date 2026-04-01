@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/script.js" defer></script>
+    <title>JUMP GAME - 2 PLAYERS</title>
+    <link rel="shortcut icon" href="images/Mario-ico.ico" type="images" />
+  </head>
+  <body>
+    <div id="start-screen">
+      <h1>JUMP GAME VS</h1>
+      <div class="controls-info">
+        <p><strong>JOGADOR 1 (Mario):</strong> Barra de Espaço</p>
+        <p><strong>JOGADOR 2 (Luigi):</strong> Seta para Cima</p>
+      </div>
+      <button id="play-btn">PLAY</button>
+    </div>
+
+    <div id="end-screen">
+      <h2 id="winner-text"></h2>
+      <button id="restart-btn">RESTART</button>
+    </div>
+
+    <div id="darkness-overlay"></div>
+
+    <div id="game-container">
+      <div class="game-board" id="board-1">
+        <img src="images/montanhas.png" class="mountain-bg bg-1" />
+        <img src="images/montanhas.png" class="mountain-bg bg-2" />
+        <img src="images/montanhas.png" class="mountain-bg bg-3" />
+        <img src="images/montanhas.png" class="mountain-bg bg-4" />
+        <img src="images/montanhas.png" class="mountain-bg bg-5" />
+        <img src="images/montanhas.png" class="mountain-fg fg-1" />
+        <img src="images/montanhas.png" class="mountain-fg fg-2" />
+        <img src="images/montanhas.png" class="mountain-fg fg-3" />
+        <img src="images/pipe.png" class="pipe" id="pipe-1" />
+        <img src="images/mario.gif" class="character" id="mario" />
+      </div>
+
+      <div class="game-board" id="board-2">
+        <img src="images/montanhas.png" class="mountain-bg bg-1" />
+        <img src="images/montanhas.png" class="mountain-bg bg-2" />
+        <img src="images/montanhas.png" class="mountain-bg bg-3" />
+        <img src="images/montanhas.png" class="mountain-bg bg-4" />
+        <img src="images/montanhas.png" class="mountain-bg bg-5" />
+        <img src="images/montanhas.png" class="mountain-fg fg-1" />
+        <img src="images/montanhas.png" class="mountain-fg fg-2" />
+        <img src="images/montanhas.png" class="mountain-fg fg-3" />
+        <img src="images/pipe.png" class="pipe" id="pipe-2" />
+        <img src="images/luigi.gif" class="character" id="luigi" />
+      </div>
+    </div>
+  </body>
+</html>
