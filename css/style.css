@@ -32,11 +32,68 @@ body {
   background-color: transparent;
 }
 
+.intro-animation-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.intro-char {
+  position: absolute;
+  width: 80px;
+  transform-origin: bottom center;
+}
+
+#intro-mario {
+  left: 0;
+  bottom: 0;
+  animation: intro-mario-anim 8s linear infinite;
+}
+
+#intro-luigi {
+  right: 0;
+  bottom: 0;
+  animation: intro-luigi-anim 8s linear infinite;
+}
+
+@keyframes intro-mario-anim {
+  0% { left: 0; bottom: 0; transform: rotate(0deg); }
+  20% { left: calc(50% - 80px); bottom: 0; transform: rotate(0deg); }
+  25% { left: 50%; bottom: 120px; transform: rotate(0deg); }
+  30% { left: calc(50% + 80px); bottom: 0; transform: rotate(0deg); }
+  40% { left: calc(100% - 80px); bottom: 0; transform: rotate(0deg); }
+  41% { left: calc(100% - 40px); bottom: 40px; transform: rotate(-90deg); }
+  55% { left: calc(100% - 40px); bottom: calc(100% - 80px); transform: rotate(-90deg); }
+  56% { left: calc(100% - 80px); bottom: 100%; transform: rotate(-180deg); }
+  70% { left: calc(50% + 40px); bottom: 100%; transform: rotate(-180deg); }
+  75% { left: calc(50% - 10px); bottom: 100%; transform: rotate(-180deg); }
+  100% { left: 0; bottom: 0; transform: rotate(-1080deg); }
+}
+
+@keyframes intro-luigi-anim {
+  0% { right: 0; bottom: 0; transform: scaleX(-1) rotate(0deg) scaleY(1); }
+  20% { right: calc(50% - 80px); bottom: 0; transform: scaleX(-1) rotate(0deg) scaleY(1); }
+  25% { right: 50%; bottom: 0; transform: scaleX(-1) rotate(0deg) scaleY(0.4); }
+  30% { right: calc(50% + 80px); bottom: 0; transform: scaleX(-1) rotate(0deg) scaleY(1); }
+  40% { right: calc(100% - 80px); bottom: 0; transform: scaleX(-1) rotate(0deg) scaleY(1); }
+  41% { right: calc(100% - 40px); bottom: 40px; transform: scaleX(-1) rotate(-90deg) scaleY(1); }
+  55% { right: calc(100% - 40px); bottom: calc(100% - 80px); transform: scaleX(-1) rotate(-90deg) scaleY(1); }
+  56% { right: calc(100% - 80px); bottom: 100%; transform: scaleX(-1) rotate(-180deg) scaleY(1); }
+  70% { right: calc(50% + 40px); bottom: 100%; transform: scaleX(-1) rotate(-180deg) scaleY(1); }
+  75% { right: calc(50% - 10px); bottom: 100%; transform: scaleX(-1) rotate(-180deg) scaleY(1); }
+  100% { right: 0; bottom: 0; transform: scaleX(-1) rotate(-1080deg) scaleY(1); }
+}
+
 h1 {
   font-size: 3rem;
   margin-bottom: 20px;
   color: #ffca18;
   text-shadow: 2px 2px 0 #000;
+  z-index: 25;
 }
 
 .controls-info {
@@ -47,6 +104,7 @@ h1 {
   text-align: center;
   font-size: 1.2rem;
   line-height: 1.8;
+  z-index: 25;
 }
 
 #play-btn,
@@ -60,6 +118,7 @@ h1 {
   border: 4px solid #333;
   border-radius: 8px;
   cursor: pointer;
+  z-index: 25;
 }
 
 #play-btn:hover,
@@ -85,6 +144,19 @@ h1 {
   pointer-events: none;
   z-index: 15;
   transition: opacity 1s linear;
+}
+
+#circling-winner {
+  position: absolute;
+  width: 100px;
+  display: none;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.animate-winner {
+  display: block !important;
+  animation: circle-screen 6s linear infinite;
 }
 
 #game-container {
@@ -121,6 +193,17 @@ h1 {
   pointer-events: none;
 }
 
+.creepy-smile {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  opacity: var(--smile-opacity, 0);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .game-over-dim {
   opacity: 0.3;
 }
@@ -139,21 +222,37 @@ h1 {
   position: absolute;
   bottom: 0;
   z-index: 2;
+  transform-origin: bottom center;
+  animation: run-squash 0.25s infinite alternate;
+  animation-play-state: paused;
 }
 
 .jump {
-  animation: jump-animation 600ms ease-out;
+  animation: jump-movement 600ms ease-out, jump-squash 600ms linear !important;
 }
 
 .cloud {
   position: absolute;
   z-index: 2;
+  filter: var(--cloud-filter, none);
 }
 
-.mountain-fg,
-.mountain-bg {
+.mountain-far-bg {
   position: absolute;
-  bottom: 0;
+  bottom: var(--bob-dist-slow, 0px);
+  filter: brightness(var(--mountain-brightness, 1));
+  animation-play-state: paused;
+  z-index: 2;
+  width: 250px;
+  opacity: 0.5;
+  animation: mountain-far-bg-animation 16s infinite linear;
+}
+
+.mountain-bg,
+.mountain-fg {
+  position: absolute;
+  bottom: var(--bob-dist-fast, 0px);
+  filter: brightness(var(--mountain-brightness, 1));
   animation-play-state: paused;
   z-index: 2;
 }
@@ -161,118 +260,100 @@ h1 {
 .mountain-fg {
   width: 1000px;
   animation: mountain-fg-animation 10s infinite linear;
-  animation-play-state: paused;
 }
 
-.fg-1 {
-  left: 0;
-}
-.fg-2 {
-  left: 1000px;
-}
-.fg-3 {
-  left: 2000px;
-}
+.fg-1 { left: 0; }
+.fg-2 { left: 1000px; }
+.fg-3 { left: 2000px; }
 
 .mountain-bg {
   width: 500px;
-  opacity: 0.7;
   animation: mountain-bg-animation 12s infinite linear;
-  animation-play-state: paused;
 }
 
-.bg-1 {
-  left: 0;
-}
-.bg-2 {
-  left: 500px;
-}
-.bg-3 {
-  left: 1000px;
-}
-.bg-4 {
-  left: 1500px;
-}
-.bg-5 {
-  left: 2000px;
-}
+.bg-1 { left: 0; }
+.bg-2 { left: 500px; }
+.bg-3 { left: 1000px; }
+.bg-4 { left: 1500px; }
+.bg-5 { left: 2000px; }
+
+.fbg-1 { left: 0; }
+.fbg-2 { left: 250px; }
+.fbg-3 { left: 500px; }
+.fbg-4 { left: 750px; }
+.fbg-5 { left: 1000px; }
+.fbg-6 { left: 1250px; }
+.fbg-7 { left: 1500px; }
+.fbg-8 { left: 1750px; }
+.fbg-9 { left: 2000px; }
 
 @keyframes pipe-animation {
-  from {
-    right: -90px;
-  }
-  to {
-    right: 100%;
-  }
+  from { right: -90px; }
+  to { right: 100%; }
 }
 
-@keyframes jump-animation {
-  0% {
-    bottom: 0;
-  }
-  45% {
-    bottom: 180px;
-  }
-  50% {
-    bottom: 180px;
-  }
-  100% {
-    bottom: 0;
-  }
+@keyframes jump-movement {
+  0% { bottom: 0; }
+  45% { bottom: 180px; }
+  50% { bottom: 180px; }
+  100% { bottom: 0; }
+}
+
+@keyframes jump-squash {
+  0% { transform: scale(1.3, 0.7); }
+  15% { transform: scale(0.8, 1.2); }
+  45% { transform: scale(1, 1); }
+  50% { transform: scale(1, 1); }
+  85% { transform: scale(0.9, 1.1); }
+  100% { transform: scale(1.3, 0.7); }
+}
+
+@keyframes run-squash {
+  0% { transform: scale(1.03, 0.97); }
+  100% { transform: scale(0.97, 1.03); }
+}
+
+@keyframes circle-screen {
+  0% { left: 0; bottom: 0; transform: rotate(0deg); }
+  23% { left: calc(100% - 100px); bottom: 0; transform: rotate(0deg); }
+  25% { left: calc(100% - 100px); bottom: 0; transform: rotate(-90deg); }
+  48% { left: calc(100% - 100px); bottom: calc(100% - 100px); transform: rotate(-90deg); }
+  50% { left: calc(100% - 100px); bottom: calc(100% - 100px); transform: rotate(-180deg); }
+  73% { left: 0; bottom: calc(100% - 100px); transform: rotate(-180deg); }
+  75% { left: 0; bottom: calc(100% - 100px); transform: rotate(-270deg); }
+  98% { left: 0; bottom: 0; transform: rotate(-270deg); }
+  100% { left: 0; bottom: 0; transform: rotate(-360deg); }
 }
 
 @keyframes cloud-animation {
-  from {
-    right: -600px;
-  }
-  to {
-    right: 100%;
-  }
+  from { right: -600px; }
+  to { right: 100%; }
 }
 
 @keyframes mountain-fg-animation {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-1000px);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-1000px); }
 }
 
 @keyframes mountain-bg-animation {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-500px);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-500px); }
+}
+
+@keyframes mountain-far-bg-animation {
+  from { transform: translateX(0); }
+  to { transform: translateX(-250px); }
 }
 
 @keyframes death-animation {
-  0% {
-    transform: translateY(0);
-    rotate: 0deg;
-  }
-  100% {
-    transform: translateY(-400px);
-    rotate: 105deg;
-  }
+  0% { transform: translateY(0); rotate: 0deg; }
+  100% { transform: translateY(-400px); rotate: 105deg; }
 }
 
 @keyframes shake-anim {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(calc(var(--shake-dist) * -1), var(--shake-dist));
-  }
-  50% {
-    transform: translate(var(--shake-dist), calc(var(--shake-dist) * -1));
-  }
-  75% {
-    transform: translate(calc(var(--shake-dist) * -1), calc(var(--shake-dist) * -1));
-  }
-  100% {
-    transform: translate(var(--shake-dist), var(--shake-dist));
-  }
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(calc(var(--shake-dist) * -1), var(--shake-dist)); }
+  50% { transform: translate(var(--shake-dist), calc(var(--shake-dist) * -1)); }
+  75% { transform: translate(calc(var(--shake-dist) * -1), calc(var(--shake-dist) * -1)); }
+  100% { transform: translate(var(--shake-dist), var(--shake-dist)); }
 }
